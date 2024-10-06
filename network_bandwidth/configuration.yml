@@ -1,0 +1,68 @@
+---
+configuration:
+    name: Network Bandwidth
+    description: Benchmark testing network bandwidth over a time using iperf
+    directory: network_bandwidth
+    cron: "0 * * * *"
+    instance-number: 2
+    instance-types:
+      - c8g.metal-24xl
+      - c7gn.metal
+      - c7g.metal
+      - c7i.metal-24xl
+      - c7a.metal-48xl
+      - c5.metal
+nodes:
+  - node-id: 0
+    ansible-configuration: ansible.yml
+
+  - node-id: 1
+    benchmark-command: ./run_bandwidth.sh
+    output-command: python3 format_output.py results_1.txt results_2.txt
+
+  - node-id: 2
+    benchmark-command: timeout 700 iperf -s
+    instance-type: c7gn.metal
+
+plots:
+  - type: line
+    title: Network Bandwidth over Time
+    xaxis: Time [s]
+    yaxis: Network Bandwidth [MB/s]
+    series:
+      - x: intervals_first_attempt
+        y: connection_1_first_attempt
+        legend: Connection 1
+
+      - x: intervals_first_attempt
+        y: connection_2_first_attempt
+        legend: Connection 2
+
+      - x: intervals_first_attempt
+        y: connection_3_first_attempt
+        legend: Connection 3
+
+      - x: intervals_first_attempt
+        y: sum_bandwidth_first_attempt
+        legend: Connections Sum
+
+  - type: line
+    title: Network Bandwidth over Time After Burn-Out
+    xaxis: Time [s]
+    yaxis: Network Bandwidth [MB/s]
+    series:
+      - x: intervals_second_attempt
+        y: connection_1_second_attempt
+        legend: Connection 1
+
+      - x: intervals_second_attempt
+        y: connection_2_second_attempt
+        legend: Connection 2
+
+      - x: intervals_second_attempt
+        y: connection_3_second_attempt
+        legend: Connection 3
+
+      - x: intervals_second_attempt
+        y: sum_bandwidth_second_attempt
+        legend: Connections Sum
