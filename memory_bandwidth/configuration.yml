@@ -1,0 +1,30 @@
+---
+configuration:
+    name: "Memory Bandwidth"
+    description: "Benchmark testing Memory Bandwidth for different number of threads"
+    directory: memory_bandwidth
+    cron: "0 * * * *"
+    instance-number: 1
+    instance-types:
+      - c8g.metal-24xl
+      - c7gn.metal
+      - c7g.metal
+      - c7i.metal-24xl
+      - c7a.metal-48xl
+      - c5.metal
+
+nodes:
+  - node-id: 0
+    ansible-configuration: ansible.yml
+    benchmark-command: ./run_membw.sh
+    output-command: python3 format_output.py results.csv
+
+plots:
+  - type: line
+    title: Bandwidth depending on number of threads
+    xaxis: Threads count
+    yaxis: Memory Bandwidth [GB/s]
+    series:
+      - x: thread_counts
+        y: memory_bandwidth
+        legend: Memory bandwidth
