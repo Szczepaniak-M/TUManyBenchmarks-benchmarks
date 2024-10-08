@@ -5,11 +5,23 @@ convert_to_bytes() {
     unit=$2
 
     case $unit in
-        KiB) echo $(echo "$size * 1024" | bc) ;;
-        MiB) echo $(echo "$size * 1024 * 1024" | bc) ;;
-        GiB) echo $(echo "$size * 1024 * 1024 * 1024" | bc) ;;
+        KiB) echo $(echo "$size * 1024 / 1" | bc) ;;
+        MiB) echo $(echo "$size * 1024 * 1024 / 1" | bc) ;;
+        GiB) echo $(echo "$size * 1024 * 1024 * 1024 / 1" | bc) ;;
         *) echo $size ;;
     esac
+}
+
+interpolate() {
+  local start=$1
+  local end=$2
+  local diff=$(("$end - $start"))
+  local step_size=$(("$diff" / 4))
+
+  # Generate the interpolated values
+  for i in $(seq 1 3); do
+    echo $(echo "$start + $i * $step_size" | bc)
+  done
 }
 
 lscpu_output=$(lscpu)
@@ -21,17 +33,24 @@ l3=$(echo "$lscpu_output" | grep "L3" | awk '{print $3, $4}')
 l1d_bytes=$(convert_to_bytes $(echo $l1d))
 l2_bytes=$(convert_to_bytes $(echo $l2))
 l3_bytes=$(convert_to_bytes $(echo $l3))
+double_l3_bytes=$(echo "$l3_bytes * 2" | bc)
 
-cache_sizes=("$l1d_bytes" "$l2_bytes" "$l3_bytes")
-threads=(1 2 4 6 8 12 16 18 20 22 24 28 32 36 40 44 48)
+# Create an array of cache sizes with interpolated values between 0, L1D, L2, L3 and 2*L3
+cache_sizes=(
+  $(interpolate 0 $l1d_bytes 3)
+  "$l1d_bytes"
+  $(interpolate $l1d_bytes $l2_bytes 3)
+  "$l2_bytes"
+  $(interpolate $l2_bytes $l3_bytes 3)
+  "$l3_bytes"
+  $(interpolate $l3_bytes double_l3_bytes 3)
+  "$double_l3_bytes"
+)
 
-repeat=100
+repeat=200
 ool=100
 for cache_size in "${cache_sizes[@]}";
 do
-  input_size=($(echo "$cache_size * 0.8 / 8" | bc))
-  for t_count in "${threads[@]}";
-  do
-    ./latency $t_count $input_size $repeat $ool >> results.txt
-  done
+  n=$(("$cache_size" / 8))
+  ./latency $n $repeat $ool >> results.txt
 done

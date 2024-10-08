@@ -19,51 +19,28 @@ nodes:
     output-command: python3 format_output.py results.txt
 plots:
   - type: line
-    title: Cache throughput per number of threads
-    xaxis: Threads number
+    title: Cache throughput for different input sizes
+    xaxis: Input size [MB]
     yaxis: Cache throughput [GB/s]
     series:
-      - x: thread_counts
-        y: l1_throughput_gb_s
-        legend: L1 cache
-      - x: thread_counts
-        y: l2_throughput_gb_s
-        legend: L2 cache
-      - x: thread_counts
-        y: l3_throughput_gb_s
-        legend: L3 cache
+      - x: input_size
+        y: throughput_gb_s
+        legend: Throughput
 
   - type: line
-    title: Cache latency per number of threads
-    xaxis: Threads number
-    yaxis: Latency
+    title: Cache latency for different input sizes
+    xaxis: Input size [MB]
+    yaxis: Latency [ns]
     series:
-      - x: thread_counts
-        y: l1_latency
-        legend: L1 cache
-      - x: thread_counts
-        y: l2_latency
-        legend: L2 cache
-      - x: thread_counts
-        y: l3_latency
-        legend: L3 cache
+      - x: input_size
+        y: latency
+        legend: Latency
 
   - type: line
-    title: Processing time per number of threads
-    xaxis: Threads number
-    yaxis: Time [ns]
+    title: Processing time for different input sizes
+    xaxis: Input size [MB]
+    yaxis: Processing Time [ns]
     series:
-      - x: thread_counts
-        y: l1_time_ns
-        legend: L1 cache
-      - x: thread_counts
-        y: l2_time_ns
-        legend: L2 cache
-      - x: thread_counts
-        y: l3_time_ns
-        legend: L3 cache
-
-series-other:
-  - l1_threads_times
-  - l2_threads_times
-  - l3_threads_times
+      - x: input_size
+        y: time_ns
+        legend: Processing time
