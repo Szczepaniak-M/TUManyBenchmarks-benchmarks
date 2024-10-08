@@ -8,5 +8,6 @@ input_size=$(echo "$size * 0.7 / 8" | bc)
 
 for t_count in "${threads[@]}";
 do
-  numactl --cpubind=0 --membind=0 -- ./membw $input_size $t_count 10 >> results.csv
+#  numactl --cpubind=0 --membind=0 --
+  ./membw $input_size $t_count 10 >> results.csv
 done

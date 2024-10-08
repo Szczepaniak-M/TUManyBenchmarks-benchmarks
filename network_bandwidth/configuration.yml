@@ -47,7 +47,7 @@ plots:
         legend: Connections Sum
 
   - type: line
-    title: Network Bandwidth over Time After Burn-Out
+    title: Network Bandwidth over Time after 6 minutes being idle
     xaxis: Time [s]
     yaxis: Network Bandwidth [MB/s]
     series:
