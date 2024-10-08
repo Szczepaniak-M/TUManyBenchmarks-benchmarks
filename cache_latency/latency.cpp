@@ -4,12 +4,6 @@
 
 using namespace std;
 
-uint64_t rdtsc() {
-   uint32_t hi, lo;
-   __asm__ __volatile__ ("rdtsc" : "=a"(lo), "=d"(hi));
-   return static_cast<uint64_t>(lo)|(static_cast<uint64_t>(hi)<<32);
-}
-
 #include <sys/time.h>
 
 static inline double gettime(void) {
@@ -23,8 +17,7 @@ uint64_t* v;
 uintptr_t rep;
 unsigned ool;
 
-static double benchmarkLatency() {
-   uint64_t start=rdtsc();
+static void benchmarkLatency() {
    uint64_t x[100];
    for (unsigned j=0; j<ool; j++)
       x[j]=j;
@@ -38,10 +31,7 @@ static double benchmarkLatency() {
    for (unsigned j=0; j<ool; j++)
       sum+=x[j];
 
-   uint64_t end=rdtsc();
-   cout << "Result: " << (end-start)/(double)rep << " "<< sum << endl;
-
-   return (end-start)/(double)rep;
+   cout << "Result: " << sum << endl;
 }
 
 int main(int argc, char** argv) {
@@ -60,7 +50,7 @@ int main(int argc, char** argv) {
       v[v2[i]]=v2[(i+1)%n];
 
    double start=gettime();
-   auto result = benchmarkLatency();
+   benchmarkLatency();
    auto duration = (gettime()-start);
 
    cout << "final: " << n << " ";
