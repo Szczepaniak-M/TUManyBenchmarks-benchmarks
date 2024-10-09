@@ -28,3 +28,8 @@
       copy:
         src: /home/ubuntu/spec_cpu/config_graviton.cfg
         dest: /home/ubuntu/specbench/config/config_graviton.cfg
+
+    - name: Make run_spec.sh executable
+      file:
+        path: /home/ubuntu/spec_cpu/run_spec.sh
+        mode: '0755'
