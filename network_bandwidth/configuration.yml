@@ -29,7 +29,7 @@ plots:
   - type: line
     title: Network Bandwidth over Time
     xaxis: Time [s]
-    yaxis: Network Bandwidth [MB/s]
+    yaxis: Network Bandwidth [Gbit/s]
     series:
       - x: intervals_first_attempt
         y: connection_min_first_attempt
@@ -50,7 +50,7 @@ plots:
   - type: line
     title: Network Bandwidth over Time after 6 minutes being idle
     xaxis: Time [s]
-    yaxis: Network Bandwidth [MB/s]
+    yaxis: Network Bandwidth [Gbit/s]
     series:
       - x: intervals_second_attempt
         y: connection_min_second_attempt
