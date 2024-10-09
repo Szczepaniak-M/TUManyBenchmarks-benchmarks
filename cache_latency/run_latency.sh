@@ -15,10 +15,8 @@ convert_to_bytes() {
 interpolate() {
   local start=$1
   local end=$2
-  local diff=$(("$end - $start"))
-  local step_size=$(("$diff" / 4))
+  local step_size=$(("$end" / 4))
 
-  # Generate the interpolated values
   for i in $(seq 1 3); do
     echo $(echo "$start + $i * $step_size" | bc)
   done
@@ -33,18 +31,19 @@ l3=$(echo "$lscpu_output" | grep "L3" | awk '{print $3, $4}')
 l1d_bytes=$(convert_to_bytes $(echo $l1d))
 l2_bytes=$(convert_to_bytes $(echo $l2))
 l3_bytes=$(convert_to_bytes $(echo $l3))
-double_l3_bytes=$(echo "$l3_bytes * 2" | bc)
 
-# Create an array of cache sizes with interpolated values between 0, L1D, L2, L3 and 2*L3
+l12_bytes=$(("$l1d_bytes + $l2_bytes"))
+l123_bytes=$(("$l1d_bytes + $l2_bytes + $l3_bytes"))
+double_cache=$(echo "$l123_bytes * 2" | bc)
 cache_sizes=(
-  $(interpolate 0 $l1d_bytes 3)
+  $(interpolate 0 $l1d_bytes)
   "$l1d_bytes"
-  $(interpolate $l1d_bytes $l2_bytes 3)
-  "$l2_bytes"
-  $(interpolate $l2_bytes $l3_bytes 3)
-  "$l3_bytes"
-  $(interpolate $l3_bytes double_l3_bytes 3)
-  "$double_l3_bytes"
+  $(interpolate $l1d_bytes $l2_bytes)
+  "$l12_bytes"
+  $(interpolate $l12_bytes $l3_bytes)
+  "$l123_bytes"
+  $(interpolate $l123_bytes $double_cache)
+  "$double_cache"
 )
 
 repeat=200
@@ -52,5 +51,5 @@ ool=100
 for cache_size in "${cache_sizes[@]}";
 do
   n=$(("$cache_size" / 8))
-  ./latency $n $repeat $ool >> results.txt
+  numactl --cpubind=0 --membind=0 ./latency $n $repeat $ool >> results.txt
 done

@@ -13,6 +13,7 @@
         name:
           - bc
           - g++
+          - numactl
         state: present
 
     - name: Install dependencies

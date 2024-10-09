@@ -20,27 +20,27 @@ nodes:
 plots:
   - type: line
     title: Cache throughput for different input sizes
-    xaxis: Input size [MB]
+    xaxis: Input size [10^x MB]
     yaxis: Cache throughput [GB/s]
     series:
-      - x: input_size
+      - x: input_size_log10
         y: throughput_gb_s
         legend: Throughput
 
   - type: line
     title: Cache latency for different input sizes
-    xaxis: Input size [MB]
+    xaxis: Input size [10^x MB]
     yaxis: Latency [ns]
     series:
-      - x: input_size
+      - x: input_size_log10
         y: latency
         legend: Latency
 
   - type: line
     title: Processing time for different input sizes
-    xaxis: Input size [MB]
+    xaxis: Input size [10^x MB]
     yaxis: Processing Time [ns]
     series:
-      - x: input_size
+      - x: input_size_log10
         y: time_ns
         legend: Processing time

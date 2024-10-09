@@ -1,5 +1,6 @@
 import json
 import sys
+import math
 
 
 def parse_file_to_json(file_path):
@@ -15,7 +16,7 @@ def parse_file_to_json(file_path):
         if lines[i].startswith('final:'):
             _, size, throughput_memory, latency, time_ns = lines[i].split()
 
-            size = int(size) * 8 / 1024 / 1024
+            size = math.log10(int(size) * 8 / 1024 / 1024)
             throughput_memory = float(throughput_memory.replace('GB/s', ''))
             latency = float(latency)
             time_ns = float(time_ns.replace('ns', ''))
@@ -26,7 +27,7 @@ def parse_file_to_json(file_path):
             time_list.append(time_ns)
 
     data = {
-        "input_size": size_list,
+        "input_size_log10": size_list,
         "throughput_gb_s": throughput_memory_list,
         "latency": latency_list,
         "time_ns": time_list,
