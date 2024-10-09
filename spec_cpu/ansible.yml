@@ -1,0 +1,30 @@
+---
+- name: Install and run sockperf
+  hosts: localhost
+  tasks:
+    - name: Ensure the directory exists
+      file:
+          path: /home/ubuntu/specbench
+          state: directory
+          mode: '0755'
+
+    - name: Mount image
+      become: true
+      command: mount -t iso9660 -o ro,exec,loop cpu2017-1.1.9.iso /mnt
+      args:
+        chdir: /home/ubuntu
+
+    - name: Install SPEC CPU
+      command: ./install.sh -f -d /home/ubuntu/specbench
+      args:
+        chdir: /mnt
+
+    - name: Copy x86 config
+      copy:
+        src: /home/ubuntu/spec_cpu/config_x86.cfg
+        dest: /home/ubuntu/specbench/config/config_x86.cfg
+
+    - name: Copy ARM config
+      copy:
+        src: /home/ubuntu/spec_cpu/config_graviton.cfg
+        dest: /home/ubuntu/specbench/config/config_graviton.cfg
