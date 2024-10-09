@@ -12,6 +12,7 @@ configuration:
       - c7i.metal-24xl
       - c7a.metal-48xl
       - c5.metal
+      - c6g.medium
 nodes:
   - node-id: 0
     ansible-configuration: ansible.yml
@@ -31,16 +32,16 @@ plots:
     yaxis: Network Bandwidth [MB/s]
     series:
       - x: intervals_first_attempt
-        y: connection_1_first_attempt
-        legend: Connection 1
+        y: connection_min_first_attempt
+        legend: Minimum Connection Bandwidth
 
       - x: intervals_first_attempt
-        y: connection_2_first_attempt
-        legend: Connection 2
+        y: connection_avg_first_attempt
+        legend: Average Connection Bandwidth
 
       - x: intervals_first_attempt
-        y: connection_3_first_attempt
-        legend: Connection 3
+        y: connection_max_first_attempt
+        legend: Maximum Connection Bandwidth
 
       - x: intervals_first_attempt
         y: sum_bandwidth_first_attempt
@@ -52,16 +53,16 @@ plots:
     yaxis: Network Bandwidth [MB/s]
     series:
       - x: intervals_second_attempt
-        y: connection_1_second_attempt
-        legend: Connection 1
+        y: connection_min_second_attempt
+        legend: Minimum Connection Bandwidth
 
       - x: intervals_second_attempt
-        y: connection_2_second_attempt
-        legend: Connection 2
+        y: connection_avg_second_attempt
+        legend: Average Connection Bandwidth
 
       - x: intervals_second_attempt
-        y: connection_3_second_attempt
-        legend: Connection 3
+        y: connection_max_second_attempt
+        legend: Maximum Connection Bandwidth
 
       - x: intervals_second_attempt
         y: sum_bandwidth_second_attempt

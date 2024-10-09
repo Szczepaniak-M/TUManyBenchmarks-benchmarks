@@ -6,10 +6,13 @@ from collections import defaultdict
 def parse_iperf(file_path, suffix):
     connection_bandwidths = defaultdict(lambda: defaultdict(float))
     sum_bandwidth = defaultdict(float)
+    min_bandwidth = defaultdict(float)
+    max_bandwidth = defaultdict(float)
+    avg_bandwidth = defaultdict(float)
     intervals = set()
 
-    connection_pattern = re.compile(r'\[\s*(\d+)\]\s+([\d.]+)-([\d.]+)\s+sec\s+([\d.]+)\s+MBytes\s+([\d.]+)\s+Mbits/sec')
-    sum_pattern = re.compile(r'\[SUM\]\s+([\d.]+)-([\d.]+)\s+sec\s+([\d.]+)\s+MBytes\s+([\d.]+)\s+Mbits/sec')
+    connection_pattern = re.compile(r'\[\s*(\d+)\]\s+([\d.]+)-([\d.]+)\s+sec\s+([\d.]+)\s+GBytes\s+([\d.]+)\s+Gbits/sec')
+    sum_pattern = re.compile(r'\[SUM\]\s+([\d.]+)-([\d.]+)\s+sec\s+([\d.]+)\s+GBytes\s+([\d.]+)\s+Gbits/sec')
 
     with open(file_path, 'r') as f:
         for line in f:
@@ -29,14 +32,22 @@ def parse_iperf(file_path, suffix):
 
                 sum_bandwidth[start_time] = bandwidth_sum
                 intervals.add(start_time)
-
+    if not sum_bandwidth:
+        sum_bandwidth = connection_bandwidths[1]
     intervals = sorted(intervals)
+    for i in intervals:
+        interval = []
+        for j in range(1, len(connection_bandwidths) + 1):
+            interval.append(connection_bandwidths[j][i])
+        min_bandwidth[i] = min(interval)
+        max_bandwidth[i] = max(interval)
+        avg_bandwidth[i] = sum(interval) / len(interval)
 
     data = {
         f'intervals_{suffix}': intervals,
-        f'connection_1_{suffix}': [connection_bandwidths[1].get(i, 0) for i in intervals],
-        f'connection_2_{suffix}': [connection_bandwidths[2].get(i, 0) for i in intervals],
-        f'connection_3_{suffix}': [connection_bandwidths[3].get(i, 0) for i in intervals],
+        f'connection_min_{suffix}': [min_bandwidth.get(i, 0) for i in intervals],
+        f'connection_max_{suffix}': [max_bandwidth.get(i, 0) for i in intervals],
+        f'connection_avg_{suffix}': [avg_bandwidth.get(i, 0) for i in intervals],
         f'sum_bandwidth_{suffix}': [sum_bandwidth.get(i, 0) for i in intervals]
     }
 
