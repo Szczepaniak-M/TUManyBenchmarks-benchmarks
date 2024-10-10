@@ -19,7 +19,7 @@ def parse_spec_cpu_output(input_file):
 
         if parse and re.match(r'^\d{3}\.[a-z0-9]+.+', line):
             fields = next(csv.reader([line]))
-            name = fields[0]
+            name = fields[0].replace(".", "_")
             base_run_time = fields[2]
             base_rate = fields[3]
             base_selected = fields[4]
