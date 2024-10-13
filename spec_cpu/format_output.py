@@ -28,17 +28,17 @@ def parse_spec_cpu_output(input_file):
             peak_selected = fields[9]
             if base_selected == '1':
                 parsed_data[f'{name}_base_selected_time'] = float(base_run_time)
-                parsed_data[f'{name}_base_selected_rate'] = float(base_rate)
+                parsed_data[f'{name}_base_selected_ratio'] = float(base_rate)
             else:
                 parsed_data[f'{name}_base_not_selected_time'] = float(base_run_time)
-                parsed_data[f'{name}_base_not_selected_rate'] = float(base_rate)
+                parsed_data[f'{name}_base_not_selected_ratio'] = float(base_rate)
 
             if peak_selected == '1':
                 parsed_data[f'{name}_peak_selected_time'] = float(peak_run_time)
-                parsed_data[f'{name}_peak_selected_rate'] = float(peak_rate)
+                parsed_data[f'{name}_peak_selected_ratio'] = float(peak_rate)
             else:
                 parsed_data[f'{name}_peak_not_selected_time'] = float(peak_run_time)
-                parsed_data[f'{name}_peak_not_selected_rate'] = float(peak_rate)
+                parsed_data[f'{name}_peak_not_selected_ratio'] = float(peak_rate)
 
     spec_base = re.search(r'SPECrate2017_int_base,([\d.]+)', data)
     spec_peak = re.search(r'SPECrate2017_int_peak,([\d.]+)', data)
