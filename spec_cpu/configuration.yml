@@ -6,13 +6,13 @@ configuration:
   instance-number: 1
   instance-types:
     - c6g.large
-    - c5.large
+    - c6i.large
 
 nodes:
   - node-id: 1
     ansible-configuration: ansible.yml
-    image-x86: ami-0d5ec66430ef2b343
-    image-arm: ami-0ca0eb1d107490e61
+    image-x86: ami-040ae5b7ceb70e213
+    image-arm: ami-0fb858c88e8a6483e
     benchmark-command: ./run_spec.sh
     output-command: python3 format_output.py /home/ubuntu/specbench/result/CPU2017.001.intrate.csv
 
