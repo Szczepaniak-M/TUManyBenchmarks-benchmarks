@@ -2,6 +2,6 @@
 
 sleep 5
 num_threads=$(lscpu | grep "^CPU(s):" | awk '{print $2}')
-iperf -c node-2 -t 300 -P $num_threads -i 1 -f g >> results_1.txt
-sleep 240
-iperf -c node-2 -t 100 -P $num_threads -i 1 -f g >> results_2.txt
+num_threads_plus_two=$(("$num_threads" + 2))
+threads=$((num_threads_plus_two < 50 ? num_threads_plus_two : 50))
+iperf -c node-2 -t 400 -P $threads -i 1 -f g >> results_1.txt

@@ -13,6 +13,12 @@ configuration:
       - c7a.metal-48xl
       - c5.metal
       - c6g.medium
+      - t2.micro
+
+      - c7g.large
+      - c7g.xlarge
+      - c7g.2xlarge
+
 nodes:
   - node-id: 0
     ansible-configuration: ansible.yml
@@ -22,7 +28,7 @@ nodes:
     output-command: python3 format_output.py results_1.txt results_2.txt
 
   - node-id: 2
-    benchmark-command: timeout 700 iperf -s
+    benchmark-command: timeout 420 iperf -s
     instance-type: c7gn.metal
 
 plots:
