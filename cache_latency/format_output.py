@@ -1,37 +1,27 @@
 import json
 import sys
 import math
+from collections import defaultdict
 
 
 def parse_file_to_json(file_path):
     with open(file_path, 'r') as file:
         lines = file.readlines()
 
-    size_list = []
-    throughput_memory_list = []
-    latency_list = []
-    time_list = []
-
-    for i in range(0, len(lines)):
-        if lines[i].startswith('final:'):
-            _, size, throughput_memory, latency, time_ns = lines[i].split()
-
-            size = math.log10(int(size) * 8 / 1024 / 1024)
-            throughput_memory = float(throughput_memory.replace('GB/s', ''))
-            latency = float(latency)
-            time_ns = float(time_ns.replace('ns', ''))
-
-            size_list.append(size)
-            throughput_memory_list.append(throughput_memory)
-            latency_list.append(latency)
-            time_list.append(time_ns)
-
+    results = defaultdict(list)
     data = {
-        "input_size_log10": size_list,
-        "throughput_gb_s": throughput_memory_list,
-        "latency": latency_list,
-        "time_ns": time_list,
+        "input_size_log10": [],
+        "latency": [],
     }
+    for i in range(0, len(lines)):
+        size, time = lines[i].split(",")
+        results[size].append(float(time))
+    for key, values in results.items():
+        size = math.log10(int(key) / 1024 / 1024)
+        time = sum(values) / len(values)
+        data["input_size_log10"].append(size)
+        data["latency"].append(time)
+
     json_output = json.dumps(data, indent=4)
     print(json_output)
 

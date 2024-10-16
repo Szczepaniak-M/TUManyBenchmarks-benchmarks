@@ -13,13 +13,22 @@ convert_to_bytes() {
 }
 
 interpolate() {
-  local start=$1
-  local end=$2
-  local step_size=$(("$end" / 4))
+    local s=$1
+    local e=$2
+    local num_points=$3
 
-  for i in $(seq 1 3); do
-    echo $(echo "$start + $i * $step_size" | bc)
-  done
+    for ((i=0; i<num_points; i++)); do
+        # Generate value with a higher density towards the edges
+        x=$(echo "$i / ($num_points - 1)" | bc -l)  # Linear interpolation between 0 and 1
+
+        # Sigmoid-like function using awk (adjustable slope factor 12 for sharper edges)
+        adj_x=$(awk -v x="$x" 'BEGIN { print 1 / (1 + exp(-6 * (x - 0.5))) }')
+
+        # Final value between start and end
+        value=$(awk -v s="$s" -v e="$e" -v adj_x="$adj_x" 'BEGIN { print int(s + e * adj_x) }')
+
+        echo "$value"
+    done
 }
 
 lscpu_output=$(lscpu)
@@ -35,21 +44,20 @@ l3_bytes=$(convert_to_bytes $(echo $l3))
 l12_bytes=$(("$l1d_bytes + $l2_bytes"))
 l123_bytes=$(("$l1d_bytes + $l2_bytes + $l3_bytes"))
 double_cache=$(echo "$l123_bytes * 2" | bc)
+triple_cache=$(echo "$l123_bytes * 3" | bc)
 cache_sizes=(
-  $(interpolate 0 $l1d_bytes)
+  $(interpolate 0 $l1d_bytes 8)
   "$l1d_bytes"
-  $(interpolate $l1d_bytes $l2_bytes)
+  $(interpolate $l1d_bytes $l2_bytes 8)
   "$l12_bytes"
-  $(interpolate $l12_bytes $l3_bytes)
+  $(interpolate $l12_bytes $l3_bytes 8)
   "$l123_bytes"
-  $(interpolate $l123_bytes $l123_bytes)
-  "$double_cache"
+  $(interpolate $l123_bytes $double_cache 8)
+  "$triple_cache"
 )
 
-repeat=200
-ool=100
 for cache_size in "${cache_sizes[@]}";
 do
-  n=$(("$cache_size" / 8))
-  numactl --cpubind=0 --membind=0 ./latency $n $repeat $ool >> results.txt
+  mlc_size=$(echo "$cache_size / 1024 / 1" | bc)
+  numactl --cpubind=0 --membind=0 ./latency $cache_size 200000000 >> results_cpp.csv
 done
