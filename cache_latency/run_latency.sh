@@ -58,6 +58,5 @@ cache_sizes=(
 
 for cache_size in "${cache_sizes[@]}";
 do
-  mlc_size=$(echo "$cache_size / 1024 / 1" | bc)
   numactl --cpubind=0 --membind=0 ./latency $cache_size 200000000 >> results.csv
 done

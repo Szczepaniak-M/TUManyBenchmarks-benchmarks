@@ -26,8 +26,3 @@
       file:
         path: /home/ubuntu/memory_bandwidth/run_membw.sh
         mode: '0755'
-
-    - name: Set huge pages
-      become: yes
-      command: 'bash -c "echo 4000 > /proc/sys/vm/nr_hugepages"'
-
