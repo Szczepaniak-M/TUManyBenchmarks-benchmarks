@@ -16,7 +16,7 @@ nodes:
   - node-id: 0
     ansible-configuration: ansible.yml
     benchmark-command: ./run_latency.sh
-    output-command: python3 format_output.py results.txt
+    output-command: python3 format_output.py results.csv
 plots:
   - type: line
     title: Cache throughput for different input sizes
