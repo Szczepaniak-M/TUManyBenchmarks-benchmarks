@@ -11,6 +11,9 @@
 #include <pthread.h>
 #include <atomic>
 #include <iostream>
+#include <sys/mman.h>
+
+#define HUGEPAGE_SIZE (2 * 1024 * 1024) // 2MB per huge page
 
 using namespace tbb;
 
@@ -27,9 +30,24 @@ int main(int argc,char** argv) {
       return 1;
    }
    uint64_t n=atof(argv[1]);
-   uint64_t* keys = new uint64_t[n];
    int num_threads = atoi(argv[2]);
    int iterations = atoi(argv[3]);
+
+   // Use Huge Pages
+   size_t size_in_bytes = n * sizeof(uint64_t);
+   if (size_in_bytes % HUGEPAGE_SIZE != 0) {
+     size_in_bytes = ((size_in_bytes / HUGEPAGE_SIZE) + 1) * HUGEPAGE_SIZE;
+   }
+
+   uint64_t* keys = (uint64_t*) mmap(nullptr, size_in_bytes,
+                                     PROT_READ | PROT_WRITE,
+                                     MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB, -1, 0);
+
+   if (keys == MAP_FAILED) {
+       perror("mmap failed");
+       return 1;
+   }
+
    oneapi::tbb::global_control global_limit(oneapi::tbb::global_control::max_allowed_parallelism, num_threads);
    static affinity_partitioner ap;
 
