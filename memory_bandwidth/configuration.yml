@@ -13,6 +13,10 @@ configuration:
       - c7a.metal-48xl
       - c5.metal
 
+      - c7g.large
+      - c7g.xlarge
+      - c7g.2xlarge
+
 nodes:
   - node-id: 0
     ansible-configuration: ansible.yml
