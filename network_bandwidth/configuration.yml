@@ -52,24 +52,3 @@ plots:
       - x: intervals_first_attempt
         y: sum_bandwidth_first_attempt
         legend: Connections Sum
-
-  - type: line
-    title: Network Bandwidth over Time after 6 minutes being idle
-    xaxis: Time [s]
-    yaxis: Network Bandwidth [Gbit/s]
-    series:
-      - x: intervals_second_attempt
-        y: connection_min_second_attempt
-        legend: Minimum Connection Bandwidth
-
-      - x: intervals_second_attempt
-        y: connection_avg_second_attempt
-        legend: Average Connection Bandwidth
-
-      - x: intervals_second_attempt
-        y: connection_max_second_attempt
-        legend: Maximum Connection Bandwidth
-
-      - x: intervals_second_attempt
-        y: sum_bandwidth_second_attempt
-        legend: Connections Sum
