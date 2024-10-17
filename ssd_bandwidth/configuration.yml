@@ -6,7 +6,7 @@ configuration:
     cron: "0 * * * *"
     instance-number: 1
     instance-types:
-      - i4g.4xlarge
+      - i4g.large
 
 nodes:
   - node-id: 0
