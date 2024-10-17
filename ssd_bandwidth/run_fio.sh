@@ -21,7 +21,7 @@ if (( ssd_size > 100 )); then
 fi
 
 sudo chmod 666 /dev/nvme1n1
-sudo fio --name=readio --rw=write --numjobs=16 --refill_buffers --ioengine=libaio --group_reporting --iodepth=128 --bs=4k --filename=/dev/nvme1n1 --size="$ssd_size" --direct=1 --output-format=json --output=results-write.json
+sudo fio --name=readio --rw=write --numjobs=16 --refill_buffers --ioengine=libaio --group_reporting --iodepth=128 --bs=4k --filename=/dev/nvme1n1 --size="$ssd_size"G --direct=1 --output-format=json --output=results-write.json
 experiments=("randwrite" "read" "randread")
 for exp in "${experiments[@]}"
 do
