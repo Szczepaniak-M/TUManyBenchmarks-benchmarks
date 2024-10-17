@@ -11,8 +11,6 @@ configuration:
 nodes:
   - node-id: 0
     ansible-configuration: ansible.yml
-
-  - node-id: 1
     benchmark-command: sudo ./run_fio.sh
     output-command: python3 format_output.py results-read.json results-randread.json results-write.json results-randwrite.json
 
