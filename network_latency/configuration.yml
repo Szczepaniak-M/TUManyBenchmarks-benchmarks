@@ -22,7 +22,6 @@ nodes:
 
   - node-id: 2
     benchmark-command: timeout 90 ./sockperf/sockperf server -i node-2 --tcp
-    instance-type: c7gn.metal
 
 plots:
   - type: scatter
