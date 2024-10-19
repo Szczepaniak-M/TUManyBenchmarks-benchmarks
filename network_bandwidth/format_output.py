@@ -3,7 +3,7 @@ import sys
 import json
 from collections import defaultdict
 
-def parse_iperf(file_path, suffix):
+def parse_iperf(file_path):
     connection_bandwidths = defaultdict(lambda: defaultdict(float))
     sum_bandwidth = defaultdict(float)
     min_bandwidth = defaultdict(float)
@@ -44,26 +44,20 @@ def parse_iperf(file_path, suffix):
         avg_bandwidth[i] = sum(interval) / len(interval)
 
     data = {
-        f'intervals_{suffix}': intervals,
-        f'connection_min_{suffix}': [min_bandwidth.get(i, 0) for i in intervals],
-        f'connection_max_{suffix}': [max_bandwidth.get(i, 0) for i in intervals],
-        f'connection_avg_{suffix}': [avg_bandwidth.get(i, 0) for i in intervals],
-        f'sum_bandwidth_{suffix}': [sum_bandwidth.get(i, 0) for i in intervals]
+        'intervals': intervals,
+        'connection_min': [min_bandwidth.get(i, 0) for i in intervals],
+        'connection_max': [max_bandwidth.get(i, 0) for i in intervals],
+        'connection_avg': [avg_bandwidth.get(i, 0) for i in intervals],
+        'sum_bandwidth': [sum_bandwidth.get(i, 0) for i in intervals]
     }
 
     return data
 
 if __name__ == "__main__":
-    if len(sys.argv) != 3:
-        print("Usage: python format_output.py <input_file_1> <input_file_2>")
+    if len(sys.argv) != 2:
+        print("Usage: python3 format_output.py <input_file_1>")
         sys.exit(1)
 
-    file_path_1 = sys.argv[1]
-    data_1 = parse_iperf(file_path_1, 'first_attempt')
-
-    file_path_2 = sys.argv[2]
-    data_2 = parse_iperf(file_path_2, 'second_attempt')
-
-    # Output the JSON data
-    merged_dict = data_1 | data_2
-    print(json.dumps(merged_dict, indent=4))
+    file_path = sys.argv[1]
+    data = parse_iperf(file_path)
+    print(json.dumps(data, indent=4))
