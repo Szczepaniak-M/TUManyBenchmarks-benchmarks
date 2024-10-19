@@ -15,9 +15,9 @@ configuration:
       - c6g.medium
       - t2.micro
 
+      - c7g.medium
       - c7g.large
       - c7g.xlarge
-      - c7g.2xlarge
 
 nodes:
   - node-id: 0
@@ -28,7 +28,7 @@ nodes:
     output-command: python3 format_output.py results.txt
 
   - node-id: 2
-    benchmark-command: timeout 420 iperf -s
+    benchmark-command: timeout 620 iperf -s
     instance-type: c7gn.metal
 
 plots:
@@ -37,18 +37,18 @@ plots:
     xaxis: Time [s]
     yaxis: Network Bandwidth [Gbit/s]
     series:
-      - x: intervals
+      - x: increasing_values
         y: connection_min
         legend: Minimum Connection Bandwidth
 
-      - x: intervals
+      - x: increasing_values
         y: connection_avg
         legend: Average Connection Bandwidth
 
-      - x: intervals
+      - x: increasing_values
         y: connection_max
         legend: Maximum Connection Bandwidth
 
-      - x: intervals
+      - x: increasing_values
         y: sum_bandwidth
         legend: Connections Sum
