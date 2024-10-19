@@ -48,7 +48,7 @@ plots:
       - x: increasing_values
         y: connection_max
         legend: Maximum Connection Bandwidth
-        
+
       - x: increasing_values
         y: sum_bandwidth
         legend: Connections Sum
