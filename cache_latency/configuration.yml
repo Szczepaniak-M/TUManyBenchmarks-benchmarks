@@ -11,6 +11,7 @@ configuration:
     - c7i.metal-24xl
     - c7a.metal-48xl
     - c5.metal
+    - c7g.medium
 
 nodes:
   - node-id: 0
