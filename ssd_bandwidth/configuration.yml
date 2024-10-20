@@ -28,7 +28,7 @@ plots:
       - y: iops_max_read
         legend: Maximum
   - type: scatter
-    title: Sequential Read Throughput
+    title: Random Read Throughput
     yaxis: SSD Throughput [IOPS]
     series:
       - y: iops_stddev_randread

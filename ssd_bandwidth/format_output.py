@@ -6,18 +6,14 @@ def parse_fio(file_path):
 
     with open(file_path, "r") as f:
         fio_json = json.load(f)
-    
-    target_benchmark = fio_json["jobs"][0][benchmark_type]
+
+    benchmark_type_json = benchmark_type.replace("rand", "")
+    target_benchmark = fio_json["jobs"][0][benchmark_type_json]
     # flatten latency dict -> e.g., "lat_ns": {"N": 42, ...} -> "lat_ns_N": 42  
-    latencies = {"lat_ns_"+key: value for key, value in target_benchmark["lat_ns"].items()}
+    latencies = {f"lat_ns_{key}_{benchmark_type}": value for key, value in target_benchmark["lat_ns"].items()}
     # remove nested json structures
-    cleaned = {key: value for key, value in target_benchmark.items() if not type(value) in [list, dict]}
-
-    data = {
-        benchmark_type: cleaned | latencies
-    }
-
-    return data
+    cleaned = {f"{key}_{benchmark_type}": value for key, value in target_benchmark.items() if not type(value) in [list, dict]}
+    return cleaned | latencies
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
