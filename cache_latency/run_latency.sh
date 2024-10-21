@@ -3,11 +3,12 @@
 convert_to_bytes() {
     size=$1
     unit=$2
+    instances=$3
 
     case $unit in
-        KiB) echo $(echo "$size * 1024 / 1" | bc) ;;
-        MiB) echo $(echo "$size * 1024 * 1024 / 1" | bc) ;;
-        GiB) echo $(echo "$size * 1024 * 1024 * 1024 / 1" | bc) ;;
+        KiB) echo $(echo "$size * 1024 / $instances / 1" | bc) ;;
+        MiB) echo $(echo "$size * 1024 * 1024 / $instances / 1" | bc) ;;
+        GiB) echo $(echo "$size * 1024 * 1024 * 1024 / $instances / 1" | bc) ;;
         *) echo $size ;;
     esac
 }
@@ -37,9 +38,13 @@ l1d=$(echo "$lscpu_output" | grep "L1d" | awk '{print $3, $4}')
 l2=$(echo "$lscpu_output" | grep "L2" | awk '{print $3, $4}')
 l3=$(echo "$lscpu_output" | grep "L3" | awk '{print $3, $4}')
 
-l1d_bytes=$(convert_to_bytes $(echo $l1d))
-l2_bytes=$(convert_to_bytes $(echo $l2))
-l3_bytes=$(convert_to_bytes $(echo $l3))
+l1d_instances=$(echo "$lscpu_output" | grep "L1d" | awk '{print $5}' | sed 's/[^0-9]//g')
+l2_instances=$(echo "$lscpu_output" | grep "L2" | awk '{print $5}' | sed 's/[^0-9]//g')
+l3_instances=$(echo "$lscpu_output" | grep "L3" | awk '{print $5}' | sed 's/[^0-9]//g')
+
+l1d_bytes=$(convert_to_bytes $(echo $l1d) $l1d_instances)
+l2_bytes=$(convert_to_bytes $(echo $l2) $l2_instances)
+l3_bytes=$(convert_to_bytes $(echo $l3) $l3_instances)
 
 l12_bytes=$(("$l1d_bytes + $l2_bytes"))
 l123_bytes=$(("$l1d_bytes + $l2_bytes + $l3_bytes"))

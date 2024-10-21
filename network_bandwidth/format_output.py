@@ -34,7 +34,7 @@ def parse_iperf(file_path):
                 intervals.add(start_time)
     if not sum_bandwidth:
         sum_bandwidth = connection_bandwidths[1]
-    intervals = sorted(intervals)[:-1]
+    intervals = sorted(intervals)[1:-1]
     for i in intervals:
         interval = []
         for j in range(1, len(connection_bandwidths) + 1):

@@ -10,11 +10,13 @@ configuration:
     - c6i.large
     - c7i.large
 
+    - m5a.large
     - c5a.large #AMD
     - c6a.large
     - c7a.large
 
-    - c6g.large #Graviton
+    - a1.large #Graviton
+    - c6g.large
     - c7g.large
     - c8g.large
 
