@@ -1,7 +1,15 @@
 #!/usr/bin/env bash
-# TODO: Dynamically detect the non-boot nvme device
+
+# Dynamically detect a non-boot nvme device
+non_boot_device=$(lsblk -dno NAME | while read dev; do
+    if ! lsblk /dev/$dev --noheadings --output MOUNTPOINT | grep -qE '^/$|^/boot/efi$'; then
+        echo $dev
+        break
+    fi
+done)
+
 lsblk_output=$(lsblk)
-size_str=$(echo "$lsblk_output" | grep "nvme1n1" | awk '{print $4}')
+size_str=$(echo "$lsblk_output" | grep "$non_boot_device" | awk '{print $4}')
 
 # Convert the input based on the unit (G for Gigabytes, T for Terabytes)
 if [[ $size_str == *"T" ]]; then
@@ -20,11 +28,11 @@ if (( ssd_size > 100 )); then
     ssd_size=100
 fi
 
-sudo chmod 666 /dev/nvme1n1
-sudo fio --name=readio --rw=write --numjobs=16 --refill_buffers --ioengine=libaio --group_reporting --iodepth=128 --bs=4k --filename=/dev/nvme1n1 --size="$ssd_size"G --direct=1 --output-format=json --output=results-write.json
+sudo chmod 666 "/dev/$non_boot_device"
+sudo fio --name=readio --rw=write --numjobs=16 --refill_buffers --ioengine=libaio --group_reporting --iodepth=128 --bs=4k --filename="/dev/$non_boot_device" --size="$ssd_size"G --direct=1 --output-format=json --output=results-write.json
 experiments=("randwrite" "read" "randread")
 for exp in "${experiments[@]}"
 do
     output_file="results-${exp}.json"
-    sudo fio --name=readio --rw="${exp}" --numjobs=16 --refill_buffers --ioengine=libaio --time_based --runtime=60s --group_reporting --iodepth=128 --bs=4k --filename=/dev/nvme1n1 --size="$ssd_size"G --direct=1 --output-format=json --output="$output_file"
+    sudo fio --name=readio --rw="${exp}" --numjobs=16 --refill_buffers --ioengine=libaio --time_based --runtime=60s --group_reporting --iodepth=128 --bs=4k --filename="/dev/$non_boot_device" --size="$ssd_size"G --direct=1 --output-format=json --output="$output_file"
 done
