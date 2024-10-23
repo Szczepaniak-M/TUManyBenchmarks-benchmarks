@@ -7,6 +7,11 @@ configuration:
     instance-number: 1
     instance-types:
       - i4g.large
+      - i4i.large
+      - is4gen.large
+      - i3.large
+      - i3en.large
+      - im4gn.large
 
 nodes:
   - node-id: 0
