@@ -55,7 +55,7 @@ cache_sizes=(
   "$l1d_bytes"
   $(interpolate $l1d_bytes $l2_bytes 8)
   "$l12_bytes"
-  $(interpolate $l12_bytes $l3_bytes 8)
+  $(interpolate $l12_bytes $l3_bytes 16)
   "$l123_bytes"
   $(interpolate $l123_bytes $double_cache 8)
   "$triple_cache"
