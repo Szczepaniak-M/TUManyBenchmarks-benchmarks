@@ -21,12 +21,12 @@
 
     - name: Copy x86 config
       copy:
-        src: /home/ubuntu/spec_cpu/config_x86.cfg
+        src: /home/ubuntu/spec_cpu_single_core/config_x86.cfg
         dest: /home/ubuntu/specbench/config/config_x86.cfg
 
     - name: Copy ARM config
       copy:
-        src: /home/ubuntu/spec_cpu/config_graviton.cfg
+        src: /home/ubuntu/spec_cpu_single_core/config_graviton.cfg
         dest: /home/ubuntu/specbench/config/config_graviton.cfg
 
     - name: Add flags tags to gcc.xml
@@ -76,5 +76,5 @@
 
     - name: Make run_spec.sh executable
       file:
-        path: /home/ubuntu/spec_cpu/run_spec.sh
+        path: /home/ubuntu/spec_cpu_single_core/run_spec.sh
         mode: '0755'

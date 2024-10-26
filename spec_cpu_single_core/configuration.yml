@@ -1,7 +1,7 @@
 configuration:
   name: "SPEC CPU2017 Integer Rate"
   description: "Benchmark analyzing CPU throughput"
-  directory: spec_cpu
+  directory: spec_cpu_single_core
   cron: "0 * * * *"
   instance-number: 1
   instance-types:
