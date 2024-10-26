@@ -1,6 +1,6 @@
 configuration:
-  name: "SPEC CPU2017 Integer Rate"
-  description: "Benchmark analyzing CPU throughput"
+  name: "SPEC CPU2017 Integer Rate - Half of Cores"
+  description: "Benchmark analyzing CPU throughput using half of cores (only physical cores)"
   directory: spec_cpu_half_cores
   cron: "0 * * * *"
   instance-number: 1
