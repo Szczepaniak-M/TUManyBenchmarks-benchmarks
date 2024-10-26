@@ -1,7 +1,8 @@
 #!/bin/bash
 
 arch=$(lscpu | grep "Architecture" | awk '{print $2}')
-cores=$(( ($(lscpu | grep "^CPU(s):" | awk '{print $2}') / 2) - 1 ))
+#cores=$(( ($(lscpu | grep "^CPU(s):" | awk '{print $2}') / 2) - 1 ))
+cores=$(( $(lscpu | grep "^CPU(s):" | awk '{print $2}') / 2))
 
 cd /home/ubuntu/specbench
 source shrc

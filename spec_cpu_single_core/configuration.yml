@@ -15,6 +15,8 @@ configuration:
     - c5a.large 
     - c6a.large
     - c7a.large
+    - c6a.2xlarge
+    - c7a.2xlarge
 
     - a1.large #Graviton
     - c6g.large
