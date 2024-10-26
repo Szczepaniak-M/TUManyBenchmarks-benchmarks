@@ -2,6 +2,9 @@
 
 # Dynamically detect a non-boot nvme device
 non_boot_device=$(lsblk -dno NAME | while read dev; do
+    if [[ $dev == "loop"* ]]; then
+      continue
+    fi
     if ! lsblk /dev/$dev --noheadings --output MOUNTPOINT | grep -qE '^/$|^/boot/efi$'; then
         echo $dev
         break
@@ -20,7 +23,7 @@ elif [[ $size_str == *"G" ]]; then
     ssd_size=$(echo $size_str | sed 's/\([0-9]*\)\.[0-9]*G/\1/')
 else
     echo "Unknown unit, only G (Gigabytes) and T (Terabytes) are supported."
-    exit 1
+#    exit 1
 fi
 
 # Cap the value at 100GB
