@@ -5,10 +5,14 @@ configuration:
   cron: "0 * * * *"
   instance-number: 1
   instance-types:
-    - c8g.metal-24xl
-    - c7gn.metal
-    - c7i.metal-24xl
-    - c7a.metal-48xl
+#    - c8g.metal-24xl
+#    - c7gn.metal
+#    - c7i.metal-24xl
+#    - c7a.metal-48xl
+
+    - a1.metal
+    - a1.2xlarge
+    - a1.medium
 
     - c7g.metal
     - c7g.2xlarge
@@ -17,6 +21,18 @@ configuration:
     - c5.metal
     - c5.2xlarge
     - c5.large
+
+    - c7i.metal-24xl
+    - c7i.2xlarge
+    - c7i.large
+
+    - c7a.metal-48xl
+    - c7a.2xlarge
+    - c7a.medium
+
+    - m5a.24xlarge
+    - m5a.2xlarge
+    - m5a.large
 
 nodes:
   - node-id: 0
