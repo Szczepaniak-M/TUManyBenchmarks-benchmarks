@@ -23,7 +23,7 @@ interpolate() {
         x=$(echo "$i / ($num_points - 1)" | bc -l)  # Linear interpolation between 0 and 1
 
         # Sigmoid-like function using awk (adjustable slope factor 12 for sharper edges)
-        adj_x=$(awk -v x="$x" 'BEGIN { print 1 / (1 + exp(-6 * (x - 0.5))) }')
+        adj_x=$(awk -v x="$x" 'BEGIN { print 1 / (1 + exp(-12 * (x - 0.5))) }')
 
         # Final value between start and end
         value=$(awk -v s="$s" -v e="$e" -v adj_x="$adj_x" 'BEGIN { print int(s + e * adj_x) }')
@@ -51,9 +51,9 @@ l123_bytes=$(("$l1d_bytes + $l2_bytes + $l3_bytes"))
 double_cache=$(echo "$l123_bytes * 2" | bc)
 triple_cache=$(echo "$l123_bytes * 3" | bc)
 cache_sizes=(
-  $(interpolate 0 $l1d_bytes 8)
+  $(interpolate 0 $l1d_bytes 10)
   "$l1d_bytes"
-  $(interpolate $l1d_bytes $l2_bytes 8)
+  $(interpolate $l1d_bytes $l2_bytes 10)
   "$l12_bytes"
   $(interpolate $l12_bytes $l3_bytes 16)
   "$l123_bytes"
