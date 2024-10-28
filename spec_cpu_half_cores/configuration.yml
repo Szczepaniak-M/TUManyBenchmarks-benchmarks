@@ -5,8 +5,21 @@ configuration:
   cron: "0 * * * *"
   instance-number: 1
   instance-types:
+    - c3.2xlarge #Intel
+    - c4.2xlarge
+    - c5.2xlarge
+    - c6i.2xlarge
+    - c7i.2xlarge
+
+    - m5a.2xlarge #AMD
+    - c5a.2xlarge
     - c6a.2xlarge
     - c7a.2xlarge
+
+    - a1.2xlarge #Graviton
+    - c6g.2xlarge
+    - c7g.2xlarge
+    - c8g.2xlarge
 
 nodes:
   - node-id: 1
