@@ -19,6 +19,16 @@ configuration:
       - c7g.large
       - c7g.xlarge
 
+      - c6i.2xlarge
+      - c7i.2xlarge
+
+      - c6a.2xlarge
+      - c7a.2xlarge
+
+      - c6g.2xlarge
+      - c7g.2xlarge
+      - c8g.2xlarge
+
 nodes:
   - node-id: 0
     ansible-configuration: ansible.yml
