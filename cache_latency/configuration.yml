@@ -6,17 +6,17 @@ configuration:
   instance-number: 1
   instance-types:
     # Graviton
-    - c6g.medium
-    - c6g.2xlarge
     - c6g.metal
+    - c6g.2xlarge
+    - c6g.medium
 
     - c7g.metal
     - c7g.2xlarge
     - c7g.medium
 
-    - c8g.medium
-    - c8g.2xlarge
     - c8g.metal-24xl
+    - c8g.2xlarge
+    - c8g.medium
 
     # Intel
     - c5.metal
